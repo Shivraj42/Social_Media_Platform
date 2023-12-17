@@ -19,6 +19,13 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+
+    /**
+     * Endpoint for user signup.
+     *
+     * @param request The SignUpRequest containing user registration details.
+     * @return ResponseEntity containing the response for the signup operation.
+     */
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody SignUpRequest request) {
         try {
@@ -31,6 +38,12 @@ public class AuthenticationController {
         }
     }
 
+    /**
+     * Endpoint for email verification.
+     *
+     * @param token The verification token extracted from the request URL.
+     * @return ResponseEntity containing the response for the email verification operation.
+     */
     @GetMapping("/verify-email")
     public ResponseEntity verifyEmail( @RequestParam("token") String token){
         try {
@@ -45,13 +58,14 @@ public class AuthenticationController {
             String response = "Any other exception";
             return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
-
-
-
-
-
     }
 
+    /**
+     * Endpoint for user signin.
+     *
+     * @param request The SignInRequest containing user login details.
+     * @return ResponseEntity containing the JwtAuthenticationResponse for the signin operation.
+     */
     @PostMapping("/signin")
     public ResponseEntity signin (@RequestBody SignInRequest request) {
         try{

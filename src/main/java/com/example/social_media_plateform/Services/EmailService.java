@@ -13,24 +13,28 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendVerificationEmail(String to, String token ) {
+    public void sendVerificationEmail(String to, String token) {
+        // Construct the verification link using the provided token
+        String verificationLink = "http://localhost:8080/accounts/verify-email?token=" + token;
 
-        String verificationLink= "http://localhost:8080/accounts/verify-email?token="+token;
-
+        // Create a MimeMessage and MimeMessageHelper for sending the email
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
         try {
+            // Set the recipient email address, email subject, and email content
             helper.setTo(to);
             helper.setSubject("Email Verification");
             helper.setText(getVerificationEmailContent(verificationLink), true);
 
+            // Send the email
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             e.printStackTrace(); // Handle the exception as needed
         }
     }
 
+    // Generate the HTML content for the verification email
     private String getVerificationEmailContent(String verificationLink) {
         return "<html><body>" +
                 "<h2>Verify Your Email Address</h2>" +
@@ -39,5 +43,6 @@ public class EmailService {
                 "<p>If you didn't register on our site, please ignore this email.</p>" +
                 "</body></html>";
     }
+
 }
 

@@ -30,16 +30,22 @@ public class User implements UserDetails {
     String lastName;
 
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     String email;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     String username;
 
+    @Column(nullable = false)
     String password;
 
     @Enumerated(EnumType.STRING)
     Role role;
+
+    String bio;
+
+    @Column(name = "profile_pic_url")
+    String profilePicUrl;
 
     boolean verified;
 

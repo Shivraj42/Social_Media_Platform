@@ -15,6 +15,12 @@ public class  EmailVerificationTokenService {
     @Autowired
     private EmailVerificationTokenRepository tokenRepository;
 
+    /**
+     * Create an email verification token for a user.
+     *
+     * @param user The user for whom the verification token is created.
+     * @return The created EmailVerificationToken.
+     */
     public EmailVerificationToken createVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
         LocalDateTime expiresAt = LocalDateTime.now().plusDays(1);   // 1 day from now

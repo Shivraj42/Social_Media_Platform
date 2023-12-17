@@ -24,24 +24,29 @@ public class JwtService {
     @Value("${token.expirationms}")
     Long jwtExpirationMs;
 
+    // Method to extract the username from a token
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    // Method to generate a token for a given user details
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    // Method to check if a token is valid for a given user details
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
+    // Private method to extract a specific claim from a token
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
     }
 
+    // Private method to generate a token with additional claims
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts
                 .builder()
@@ -53,14 +58,17 @@ public class JwtService {
                 .compact();
     }
 
+    // Private method to check if a token is expired
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    // Private method to extract the expiration date from a token
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    // Private method to extract all claims from a token
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
@@ -70,9 +78,10 @@ public class JwtService {
                 .getBody();
     }
 
+    // Private method to get the signing key for JWT
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 }
+
