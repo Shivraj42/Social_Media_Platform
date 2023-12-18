@@ -48,6 +48,7 @@ public class Notification {
     @JoinColumn(name = "from_comment")
     private Comment fromComment;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private NotificationType notificationType;
 
