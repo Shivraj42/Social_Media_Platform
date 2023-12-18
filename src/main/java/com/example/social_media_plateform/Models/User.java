@@ -10,8 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
@@ -55,6 +54,32 @@ public class User implements UserDetails {
 
     LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+     Set<Follow> followers= new HashSet<>();
+
+    @OneToMany(mappedBy = "following")
+     Set<Follow> following= new HashSet<>();
+
+    @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL)
+     Set<Friendship> friendships= new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     List<Post> posts= new ArrayList<>();
+
+    @ManyToMany(mappedBy = "likedByUsers", cascade = CascadeType.ALL)
+     Set<Post> likedPosts = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     List<Notification> notifications= new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     List<Comment> comments= new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+     List<Message> sentMessages;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+     List<Message> receivedMessages;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -85,4 +110,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

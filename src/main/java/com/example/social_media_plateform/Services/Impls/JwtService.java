@@ -1,4 +1,4 @@
-package com.example.social_media_plateform.Services;
+package com.example.social_media_plateform.Services.Impls;
 
 import java.security.Key;
 import java.util.Date;

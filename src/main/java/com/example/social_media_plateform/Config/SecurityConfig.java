@@ -1,7 +1,7 @@
 package com.example.social_media_plateform.Config;
 
 import com.example.social_media_plateform.Filters.JwtAuthenticationFilter;
-import com.example.social_media_plateform.Services.UserService;
+import com.example.social_media_plateform.Services.Impls.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,6 +49,7 @@ public class SecurityConfig {
                          .requestMatchers(HttpMethod.POST, "/accounts/**").permitAll()
                          .requestMatchers(HttpMethod.GET, "/accounts/**").permitAll()
                          .requestMatchers(HttpMethod.GET, "/test/**").permitAll()
+                         .requestMatchers("/user/**").permitAll()
                          .anyRequest().authenticated()
                  )
                  .authenticationProvider(authenticationProvider())

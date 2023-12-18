@@ -3,7 +3,7 @@ package com.example.social_media_plateform.Config;
 import com.example.social_media_plateform.Enums.Role;
 import com.example.social_media_plateform.Models.User;
 import com.example.social_media_plateform.Repositories.UserRepository;
-import com.example.social_media_plateform.Services.UserService;
+import com.example.social_media_plateform.Services.Impls.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

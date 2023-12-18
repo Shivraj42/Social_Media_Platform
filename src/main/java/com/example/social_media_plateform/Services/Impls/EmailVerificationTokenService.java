@@ -1,4 +1,4 @@
-package com.example.social_media_plateform.Services;
+package com.example.social_media_plateform.Services.Impls;
 
 import com.example.social_media_plateform.Models.EmailVerificationToken;
 import com.example.social_media_plateform.Models.User;
