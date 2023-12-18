@@ -1,8 +1,10 @@
 package com.example.social_media_plateform.Services.Impls;
 
+import com.example.social_media_plateform.DTOs.responseDTOs.UserProfileResponseDTO;
+import com.example.social_media_plateform.Exceptions.UserNotFoundException;
 import com.example.social_media_plateform.Models.User;
 import com.example.social_media_plateform.Repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.example.social_media_plateform.Transformers.UserTransformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +14,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     final UserRepository userRepository;
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Custom implementation of the UserDetailsService interface for loading user details by username or email.
@@ -57,4 +62,17 @@ public class UserService {
     }
 
 
+    public UserProfileResponseDTO updateBio(String username, String bio) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setBio(bio);
+
+        User savedUser=userRepository.save(user);
+
+        UserProfileResponseDTO response= UserTransformers.userToUserProfileResponse(user);
+
+        return response;
+    }
 }
