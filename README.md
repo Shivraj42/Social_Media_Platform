@@ -15,7 +15,8 @@ The Social Media Platform project aims to create a robust and user-friendly soci
 - [Social Features](#social-features)
   - [Friendship and Following](#friendship-and-following)
   - [Activity Feed](#activity-feed)
--[Technology Stack](#Technology-Stack)
+- [Technology Stack](#technology-stack)
+- [Database ER Diagram](#database-er-diagram)
 
 ## User Authentication and Authorization
 
@@ -76,5 +77,6 @@ The Social Media Platform project aims to create a robust and user-friendly soci
 
 - Postgres
 
-##Database ER Diagram
+## Database ER Diagram
+
 ![smdb - public](https://github.com/Shivraj42/Social_Media_Platform/assets/133359705/8e4bdb3c-7b4f-416e-aa7e-b4c0ef028ee6)
