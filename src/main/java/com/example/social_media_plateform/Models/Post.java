@@ -33,10 +33,10 @@ public class Post {
     private User user;
 
     @Column(name = "content", nullable = false)
-    private String content;
+    private String content="";
 
     @Column(name = "media_url")
-    private String mediaURL;
+    private String mediaURL="";
 
     @CreationTimestamp
     @Column(name = "post_date", nullable = false)
@@ -46,6 +46,8 @@ public class Post {
     @Column(name = "privacy_setting", nullable = false)
     private PrivacySetting privacySetting;
 
+    @Column(name = "is_repost")
+    private boolean reposted;
 
     @ManyToMany
     @JoinTable(

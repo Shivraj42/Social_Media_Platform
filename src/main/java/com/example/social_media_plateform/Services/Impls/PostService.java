@@ -62,12 +62,12 @@ public class PostService {
                     .content(post.getContent())
                     .mediaURL(post.getMediaURL())
                     .user(user)
+                    .reposted(true)
                     .build();
 
             Post savedRepost= postRepository.save(repost);
             return "Post reposted successfully!";
         }
         else return "Cannot repost private post!";
-
     }
 }

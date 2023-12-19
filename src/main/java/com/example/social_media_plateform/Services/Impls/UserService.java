@@ -1,9 +1,12 @@
 package com.example.social_media_plateform.Services.Impls;
 
+import com.example.social_media_plateform.DTOs.responseDTOs.PostResponseDTO;
 import com.example.social_media_plateform.DTOs.responseDTOs.UserProfileResponseDTO;
 import com.example.social_media_plateform.Exceptions.UserNotFoundException;
+import com.example.social_media_plateform.Models.Post;
 import com.example.social_media_plateform.Models.User;
 import com.example.social_media_plateform.Repositories.UserRepository;
+import com.example.social_media_plateform.Transformers.PostTransformers;
 import com.example.social_media_plateform.Transformers.UserTransformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -95,6 +100,45 @@ public class UserService {
 
         UserProfileResponseDTO response= UserTransformers.userToUserProfileResponse(user);
 
+        return response;
+    }
+
+    public String disableUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setDisabled(true);
+        userRepository.save(user);
+        return "User disabled successfully!";
+    }
+    public String enableUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setDisabled(false);
+        userRepository.save(user);
+        return "User enabled successfully!";
+    }
+
+
+    public UserProfileResponseDTO viewProfile(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        UserProfileResponseDTO userProfileResponseDTO= UserTransformers.userToUserProfileResponse(user);
+        return userProfileResponseDTO;
+    }
+
+    public List<PostResponseDTO> viewAllPost(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        List<PostResponseDTO> response= new ArrayList<>();
+        List<Post> posts= user.getPosts();
+        for(Post post:posts){
+            PostResponseDTO postResponseDTO= PostTransformers.postToPostResponseDTO(post);
+            response.add(postResponseDTO);
+        }
         return response;
     }
 }

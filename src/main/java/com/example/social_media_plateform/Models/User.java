@@ -54,6 +54,9 @@ public class User implements UserDetails {
 
     LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    EmailVerificationToken emailVerificationToken;
+
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
      Set<Follow> followers= new HashSet<>();
 
@@ -98,7 +101,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !Disabled;
     }
 
     @Override
@@ -108,7 +111,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !Disabled;
     }
 
 }
