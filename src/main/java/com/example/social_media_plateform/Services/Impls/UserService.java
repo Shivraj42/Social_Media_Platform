@@ -73,36 +73,55 @@ public class UserService {
     }
 
 
+    /**
+     * Updates the user's bio.
+     *
+     * @param username The username of the user.
+     * @param bio      The new bio to be set.
+     * @return A UserProfileResponseDTO containing the updated user profile information.
+     */
     public UserProfileResponseDTO updateBio(String username, String bio) {
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setBio(bio);
 
-        User savedUser=userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        UserProfileResponseDTO response= UserTransformers.userToUserProfileResponse(user);
+        UserProfileResponseDTO response = UserTransformers.userToUserProfileResponse(savedUser);
 
         return response;
     }
 
-
+    /**
+     * Updates the user's profile picture.
+     *
+     * @param username The username of the user.
+     * @param file     The new profile picture file.
+     * @return A UserProfileResponseDTO containing the updated user profile information.
+     * @throws IOException If there is an issue with file handling.
+     */
     public UserProfileResponseDTO updateProfilePic(String username, MultipartFile file) throws IOException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        String profilePicUrl=s3Service.uploadFile(file);
+        String profilePicUrl = s3Service.uploadFile(file);
 
         user.setProfilePicUrl(profilePicUrl);
 
-        User savedUser= userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        UserProfileResponseDTO response= UserTransformers.userToUserProfileResponse(user);
+        UserProfileResponseDTO response = UserTransformers.userToUserProfileResponse(savedUser);
 
         return response;
     }
 
+    /**
+     * Disables a user.
+     *
+     * @param username The username of the user to be disabled.
+     * @return A success message indicating that the user was disabled successfully.
+     */
     public String disableUser(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -111,6 +130,13 @@ public class UserService {
         userRepository.save(user);
         return "User disabled successfully!";
     }
+
+    /**
+     * Enables a user.
+     *
+     * @param username The username of the user to be enabled.
+     * @return A success message indicating that the user was enabled successfully.
+     */
     public String enableUser(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -120,23 +146,34 @@ public class UserService {
         return "User enabled successfully!";
     }
 
-
+    /**
+     * Views the user's profile.
+     *
+     * @param username The username of the user whose profile is to be viewed.
+     * @return A UserProfileResponseDTO containing the user's profile information.
+     */
     public UserProfileResponseDTO viewProfile(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        UserProfileResponseDTO userProfileResponseDTO= UserTransformers.userToUserProfileResponse(user);
+        UserProfileResponseDTO userProfileResponseDTO = UserTransformers.userToUserProfileResponse(user);
         return userProfileResponseDTO;
     }
 
+    /**
+     * Views all posts of a user.
+     *
+     * @param username The username of the user whose posts are to be viewed.
+     * @return A list of PostResponseDTOs containing information about each post.
+     */
     public List<PostResponseDTO> viewAllPost(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        List<PostResponseDTO> response= new ArrayList<>();
-        List<Post> posts= user.getPosts();
-        for(Post post:posts){
-            PostResponseDTO postResponseDTO= PostTransformers.postToPostResponseDTO(post);
+        List<PostResponseDTO> response = new ArrayList<>();
+        List<Post> posts = user.getPosts();
+        for (Post post : posts) {
+            PostResponseDTO postResponseDTO = PostTransformers.postToPostResponseDTO(post);
             response.add(postResponseDTO);
         }
         return response;

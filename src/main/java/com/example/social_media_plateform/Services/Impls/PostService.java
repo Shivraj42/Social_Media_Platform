@@ -147,7 +147,7 @@ public class PostService {
     }
 
     /**
-     * Generates a personalized feed of posts for a user based on followers and friends.
+     * Generates a personalized feed of posts for a user based on followed users and friends.
      *
      * @param username The username of the user generating the feed.
      * @return A list of response DTOs for the posts in the feed.

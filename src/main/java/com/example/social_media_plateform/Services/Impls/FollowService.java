@@ -26,7 +26,13 @@ public class FollowService {
     }
 
 
-
+    /**
+     * Follow a user if not following already
+     *
+     * @param follower    the username of user who is following
+     * @param following   the username of user whom to follow
+     * @return   The String response
+     */
     public String followUser(String follower, String following) {
 
         User followerUser =userRepository.findByUsername(follower).orElseThrow(() -> new UserNotFoundException("User Not Found!"));
@@ -52,6 +58,13 @@ public class FollowService {
 
     }
 
+    /**
+     * check for the following status
+     *
+     * @param follower   the user follower to check
+     * @param following  the followed  user to check
+     * @return  the boolean value for isFollowing
+     */
     private boolean isFollowing(User follower, User following) {
         Optional<Follow> follow= followRepository.findByFollowerAndFollowing(follower, following);
         if(follow.isPresent()) return true;
@@ -59,13 +72,22 @@ public class FollowService {
     }
 
 
+    /**
+     * Unfollow a followed user
+     *
+     * @param follower  the username of user who wants to unfollow
+     * @param followed  the username of user whom to unfollow
+     * @return Returns a string response status
+     */
     public String unfollowUser(String follower, String followed) {
-
+        // check the user
         User followerUser =userRepository.findByUsername(follower).orElseThrow(() -> new UserNotFoundException("User Not Found!"));
-
+        // check the folloed user
         User followedUser=userRepository.findByUsername(followed).orElseThrow(() -> new UserNotFoundException("User Not Found!"));
-
+        // find the follow entity
         Optional<Follow> optionalFollow= followRepository.findByFollowerAndFollowing(followerUser, followedUser);
+
+        // unfollow if following
         if(optionalFollow.isPresent()){
             followerUser.getFollowing().remove(followedUser);
             followedUser.getFollowers().remove(followerUser);
