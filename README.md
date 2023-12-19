@@ -15,8 +15,7 @@ The Social Media Platform project aims to create a robust and user-friendly soci
 - [Social Features](#social-features)
   - [Friendship and Following](#friendship-and-following)
   - [Activity Feed](#activity-feed)
-  - [Messaging](#messaging)
-- [Analytics](#analytics)
+-[Technology Stack](#Technology-Stack)
 
 ## User Authentication and Authorization
 
