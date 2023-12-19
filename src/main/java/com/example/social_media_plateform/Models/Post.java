@@ -22,13 +22,16 @@ import java.util.Set;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long postID;
+
+    @Column( nullable = false)
+    private String postKey;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Lob
     @Column(name = "content", nullable = false)
     private String content;
 
