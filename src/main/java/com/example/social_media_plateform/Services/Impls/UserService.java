@@ -10,16 +10,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
 public class UserService {
 
     final UserRepository userRepository;
+
+    private final S3Service s3Service;
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       S3Service s3Service) {
         this.userRepository = userRepository;
+        this.s3Service = s3Service;
     }
 
     /**
@@ -70,6 +76,22 @@ public class UserService {
         user.setBio(bio);
 
         User savedUser=userRepository.save(user);
+
+        UserProfileResponseDTO response= UserTransformers.userToUserProfileResponse(user);
+
+        return response;
+    }
+
+
+    public UserProfileResponseDTO updateProfilePic(String username, MultipartFile file) throws IOException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        String profilePicUrl=s3Service.uploadFile(file);
+
+        user.setProfilePicUrl(profilePicUrl);
+
+        User savedUser= userRepository.save(user);
 
         UserProfileResponseDTO response= UserTransformers.userToUserProfileResponse(user);
 
