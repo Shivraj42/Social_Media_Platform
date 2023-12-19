@@ -1,6 +1,8 @@
 package com.example.social_media_plateform.Controllers;
 
 import com.example.social_media_plateform.DTOs.requestDTOs.PostRequestDTO;
+import com.example.social_media_plateform.DTOs.responseDTOs.PostResponseDTO;
+import com.example.social_media_plateform.DTOs.responseDTOs.UserProfileResponseDTO;
 import com.example.social_media_plateform.Enums.PrivacySetting;
 import com.example.social_media_plateform.Services.Impls.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user/post")
@@ -29,7 +33,7 @@ public class PostController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         try{
-            String response= postService.createPost( username, postRequestDTO, file);
+            PostResponseDTO response= postService.createPost( username, postRequestDTO, file);
             return  new ResponseEntity(response, HttpStatus.CREATED);
         }
         catch (Exception e){
@@ -46,8 +50,40 @@ public class PostController {
         String username = authentication.getName();
 
         try{
-            String response= postService.repostPost(username, postId, privacySetting);
+            PostResponseDTO response= postService.repostPost(username, postId, privacySetting);
             return  new ResponseEntity(response, HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            String response= e.getMessage();
+            return  new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/view-all-posts")
+    public ResponseEntity viewAllPosts(@RequestParam("user") String targetUsername ){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String myUsername = authentication.getName();
+
+        try{
+            List<PostResponseDTO> response= postService.viewAllPosts( myUsername,targetUsername);
+            return  new ResponseEntity(response, HttpStatus.OK);
+        }
+        catch (Exception e){
+            String response= e.getMessage();
+            return  new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity generateFeed(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        try{
+            List<PostResponseDTO> response= postService.generateFeed(username);
+            return  new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception e){
             String response= e.getMessage();

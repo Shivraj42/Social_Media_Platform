@@ -13,6 +13,7 @@ public class PostTransformers {
                 .postKey(UUID.randomUUID().toString())
                 .content(postRequestDTO.getContent())
                 .user(user)
+                .reposted(false)
                 .mediaURL(mediaUrl)
                 .privacySetting(postRequestDTO.getPrivacySetting())
                 .build();
