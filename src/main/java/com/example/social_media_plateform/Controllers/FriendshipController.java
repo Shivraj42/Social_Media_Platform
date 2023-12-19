@@ -4,6 +4,8 @@ import com.example.social_media_plateform.Services.Impls.FriendshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,8 +20,14 @@ public class FriendshipController {
     }
 
     @PostMapping("/send-request")
-    public ResponseEntity sendRequest(@RequestParam("from") String senderUsername,
-                                      @RequestParam("to") String receiverUsername){
+    public ResponseEntity sendRequest(@RequestParam("to") String receiverUsername){
+
+        // Get the authentication object from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Get the username from the authentication object
+        String senderUsername = authentication.getName();
+
         try{
             String response= friendshipService.sendRequest(senderUsername, receiverUsername);
             return  new ResponseEntity(response, HttpStatus.OK);
@@ -31,8 +39,11 @@ public class FriendshipController {
     }
 
     @PutMapping("/accept-request")
-    public ResponseEntity acceptRequest(@RequestParam("from") String senderUsername,
-                                      @RequestParam("to") String receiverUsername){
+    public ResponseEntity acceptRequest(@RequestParam("to") String receiverUsername){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String senderUsername = authentication.getName();
+
         try{
             String response= friendshipService.acceptRequest(senderUsername, receiverUsername);
             return  new ResponseEntity(response, HttpStatus.OK);

@@ -33,8 +33,8 @@ public class PostService {
     }
 
 
-    public String createPost(PostRequestDTO postRequestDTO, MultipartFile file) throws IOException {
-        User user = userRepository.findByUsername(postRequestDTO.getUsername())
+    public String createPost(String username,PostRequestDTO postRequestDTO, MultipartFile file) throws IOException {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         String mediaFileUrl= s3Service.uploadFile(file);

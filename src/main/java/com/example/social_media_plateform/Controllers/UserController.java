@@ -5,10 +5,9 @@ import com.example.social_media_plateform.Services.Impls.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -22,8 +21,13 @@ public class UserController {
     }
 
     @PutMapping("/update-bio")
-    public ResponseEntity updateBio(@RequestParam("user") String username,
-                                    @RequestParam("bio") String bio){
+    public ResponseEntity updateBio(@RequestParam("bio") String bio){
+
+        // Get the authentication object from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Get the username from the authentication object
+        String username = authentication.getName();
 
         try{
             UserProfileResponseDTO response= userService.updateBio(username, bio);
@@ -36,8 +40,13 @@ public class UserController {
     }
 
     @PutMapping("/update-profile-pic")
-    public ResponseEntity updateBio(@RequestParam("user") String username,
-                                    @RequestParam("pic")MultipartFile file){
+    public ResponseEntity updateBio( @RequestPart("pic") MultipartFile file){
+
+        // Get the authentication object from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Get the username from the authentication object
+        String username = authentication.getName();
 
         try{
             UserProfileResponseDTO response= userService.updateProfilePic(username, file);
@@ -48,4 +57,5 @@ public class UserController {
             return  new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
     }
+
 }

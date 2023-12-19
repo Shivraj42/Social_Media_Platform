@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostRequestDTO {
 
-    private String username;
     private String content;
     private PrivacySetting privacySetting;
 }
